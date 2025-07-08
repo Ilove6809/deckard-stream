@@ -31,6 +31,7 @@ app.post('/incoming', (req, res) => {
 });
 
 app.ws('/connection', (ws) => {
+console.log('WebSocket connection opened!');
   try {
     ws.on('error', console.error);
     // Filled in from start message
