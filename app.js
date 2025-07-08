@@ -108,6 +108,9 @@ app.ws('/connection', (ws) => {
   } catch (err) {
     console.log(err);
   }
+
+app.get('/', (req, res) => {
+  res.send('Deckard is live');
 });
 
 app.listen(PORT);
