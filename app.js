@@ -48,6 +48,7 @@ console.log('WebSocket connection opened!');
   
     // Incoming from MediaStream
     ws.on('message', function message(data) {
+      console.log('📩 Message received from Twilio');
       const msg = JSON.parse(data);
       if (msg.event === 'start') {
         streamSid = msg.start.streamSid;
