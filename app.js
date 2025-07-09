@@ -81,7 +81,7 @@ app.ws('/connection', (ws) => {
             {
               partialResponseIndex: null,
               partialResponse:
-                "Hello! I understand you're looking for a pair of AirPods, is that correct?",
+                "Hi! This is Deckard from Samurai Security. Thanks for taking the call — how are you today?",
             },
             0
           );
