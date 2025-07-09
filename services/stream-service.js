@@ -37,6 +37,7 @@ class StreamService extends EventEmitter {
       JSON.stringify({
         streamSid: this.streamSid,
         event: 'media',
+        track: 'outbound',
         media: {
           payload: audio,
         },
