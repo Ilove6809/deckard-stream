@@ -16,6 +16,9 @@ class TextToSpeechService extends EventEmitter {
     if (!partialResponse) { return; }
 
     try {
+      const MODEL = process.env.DEEPGRAM_TTS_MODEL       // the env-var you set
+            || process.env.VOICE_MODEL             // falls back to old name
+            || 'aura-2-luna-en';                   // final hard-coded default
       const response = await fetch(
         `https://api.deepgram.com/v1/speak?model=${process.env.VOICE_MODEL}&encoding=mulaw&sample_rate=8000&container=none`,
         {
