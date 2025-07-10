@@ -20,7 +20,7 @@ class TextToSpeechService extends EventEmitter {
             || process.env.VOICE_MODEL             // falls back to old name
             || 'aura-2-luna-en';                   // final hard-coded default
       const response = await fetch(
-        `https://api.deepgram.com/v1/speak?model=${process.env.VOICE_MODEL}&encoding=mulaw&sample_rate=8000&container=none`,
+        `https://api.deepgram.com/v1/speak?model=${MODEL}&encoding=mulaw&sample_rate=8000&container=none`,
         {
           method: 'POST',
           headers: {
