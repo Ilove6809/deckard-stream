@@ -7,48 +7,46 @@ class TextToSpeechService extends EventEmitter {
   constructor() {
     super();
     this.nextExpectedIndex = 0;
-    this.speechBuffer = {};
+    this.speechBuffer      = {};
   }
 
   async generate(gptReply, interactionCount) {
     const { partialResponseIndex, partialResponse } = gptReply;
-
-    if (!partialResponse) { return; }
+    if (!partialResponse) return;
 
     try {
-      const MODEL = process.env.DEEPGRAM_TTS_MODEL       // the env-var you set
-            || process.env.VOICE_MODEL             // falls back to old name
-            || 'aura-2-luna-en';                   // final hard-coded default
-      const response = await fetch(
-        `https://api.deepgram.com/v1/speak?model=${MODEL}&encoding=mulaw&sample_rate=8000&container=none`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Token ${process.env.DEEPGRAM_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            text: partialResponse,
-          }),
-        }
-      );
+      // ───── 1. Choose the Deepgram model (env var → sane default) ─────
+      const MODEL = process.env.DEEPGRAM_TTS_MODEL || 'aura-2-callista-en';
 
-      if (response.status === 200) {
-        try {
-          const blob = await response.blob();
-          const audioArrayBuffer = await blob.arrayBuffer();
-          const base64String = Buffer.from(audioArrayBuffer).toString('base64');
-          this.emit('speech', partialResponseIndex, base64String, partialResponse, interactionCount);
-        } catch (err) {
-          console.log(err);
-        }
+      // ───── 2. Build the /v1/speak URL safely ─────
+      const url =
+        'https://api.deepgram.com/v1/speak?' +
+        new URLSearchParams({
+          model:       MODEL,
+          encoding:    'mulaw',
+          sample_rate: '8000',
+          container:   'none'
+        });
+
+      // ───── 3. Call Deepgram TTS ─────
+      const response = await fetch(url, {
+        method:  'POST',
+        headers: {
+          Authorization: `Token ${process.env.DEEPGRAM_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: partialResponse })
+      });
+
+      if (response.ok) {
+        const audioBuffer   = await response.arrayBuffer();
+        const base64Payload = Buffer.from(audioBuffer).toString('base64');
+        this.emit('speech', partialResponseIndex, base64Payload, partialResponse, interactionCount);
       } else {
-        console.log('Deepgram TTS error:');
-        console.log(response);
+        console.error('Deepgram TTS error:', response.status, await response.text());
       }
     } catch (err) {
-      console.error('Error occurred in TextToSpeech service');
-      console.error(err);
+      console.error('Error occurred in TextToSpeech service:', err);
     }
   }
 }
