@@ -99,7 +99,10 @@ app.ws('/connection', (ws) => {
         );
       }
     });
-
+    /*  We pace outbound audio in real time now, so clearing the stream
+    just before Twilio finishes playing it causes silence.
+    Keeping this handler in case we want to re-enable barge-in later.
+    
     transcriptionService.on('utterance', (text) => {
       if (marks.length > 0 && text?.length > 5) {
         console.log('Twilio -> Interruption, Clearing stream'.red);
@@ -111,7 +114,7 @@ app.ws('/connection', (ws) => {
         );
       }
     });
-
+    */
     transcriptionService.on('transcription', (text) => {
       if (!text) return;
       console.log(
