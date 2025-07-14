@@ -43,19 +43,20 @@ class StreamService extends EventEmitter {
 
     for (let i = 0; i < raw.length; i += FRAME_BYTES) {
       const slice   = raw.subarray(i, i + FRAME_BYTES);
-      if (!slice.length) continue;                         // safety
+      if (!slice.length) continue;
 
       const payload = slice.toString('base64');
+
+      /* 🔍 print the very first frame of each utterance */
+      if (i === 0) console.log('[OUT]', this.streamSid || '<noSid>', payload.length);
 
       this.ws.send(JSON.stringify({
         streamSid: this.streamSid,
         event:     'media',
-        track:     'outbound',           // 🔑 must be “outbound”
         media:     { payload }
       }));
     }
 
-    /* mark the end of this utterance (Twilio uses it for timing) */
     const markLabel = uuid.v4();
     this.ws.send(JSON.stringify({
       streamSid: this.streamSid,
