@@ -58,6 +58,7 @@ class StreamService extends EventEmitter {
       this.ws.send(JSON.stringify({
         streamSid: this.streamSid,
         event:     'media',
+        track:     'outbound', ← mandatory on outbound frames
         media:     { payload }
       }));
 
