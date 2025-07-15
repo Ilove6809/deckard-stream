@@ -51,14 +51,11 @@ class StreamService extends EventEmitter {
 
       /* log first frame of each utterance for debugging */
       if (i === 0) console.log('[OUT]', this.streamSid.slice(0, 8), payload.length);
-
       this.ws.send(JSON.stringify({
         streamSid: this.streamSid,
         event:     'media',
-        media:    {
-            payload,
-            track: 'outbound'
-        }
+        track: 'outbound',              
+        media: { payload }             
       }));
 
       /* pace frames so Twilio treats them as real-time audio */
