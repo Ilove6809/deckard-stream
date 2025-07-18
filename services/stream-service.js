@@ -53,8 +53,7 @@ class StreamService extends EventEmitter {
       if (i === 0) console.log('[OUT]', this.streamSid.slice(0, 8), payload.length);
       this.ws.send(JSON.stringify({
         streamSid: this.streamSid,
-        event:     'media',
-        track: 'outbound',              
+        event:     'media',           
         media: { payload }             
       }));
 
