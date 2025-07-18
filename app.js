@@ -16,7 +16,8 @@ const VoiceResponse = require('twilio').twiml.VoiceResponse;
 /* ─────────────────────────  App & WebSocket bootstrap ───────────────────────── */
 
 const app    = express();
-app.use(express.json());  
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: false }));
 const server = http.createServer(app);         // 👈 new
 ExpressWs(app, server);                        // 👈 attach ws to *server*
 
