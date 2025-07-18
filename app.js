@@ -150,7 +150,8 @@ app.ws('/connection', (ws) => {
 
 /* ──────────  Twilio Media‑Stream status‑callback  ────────── */
 app.post('/stream_status', (req, res) => {
-  console.log('[StreamStatus]', req.body);   // logs initiated | connected | failed | closed
+  console.log('[StreamStatus headers]', req.headers['content-type']);
+  console.log('[StreamStatus body   ]', req.body);
   res.sendStatus(200);
 });
 
