@@ -16,6 +16,7 @@ const VoiceResponse = require('twilio').twiml.VoiceResponse;
 /* ─────────────────────────  App & WebSocket bootstrap ───────────────────────── */
 
 const app    = express();
+app.use(express.json());  
 const server = http.createServer(app);         // 👈 new
 ExpressWs(app, server);                        // 👈 attach ws to *server*
 
@@ -144,6 +145,12 @@ app.ws('/connection', (ws) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+/* ──────────  Twilio Media‑Stream status‑callback  ────────── */
+app.post('/stream_status', (req, res) => {
+  console.log('[StreamStatus]', req.body);   // logs initiated | connected | failed | closed
+  res.sendStatus(200);
 });
 
 /* ───────────────────────────  health-check route  ───────────────────────────── */
