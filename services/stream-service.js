@@ -58,7 +58,7 @@ class StreamService extends EventEmitter {
       }));
 
       /* pace frames so Twilio treats them as real-time audio */
-      //await new Promise(r => setTimeout(r, 20));
+      await new Promise(r => setTimeout(r, 20));
     }
 
     /* mark end of utterance */
